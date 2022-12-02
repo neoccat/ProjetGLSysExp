@@ -24,5 +24,9 @@ public abstract class Fait<T> {
 
     public void setValue(T value) {
         this.value = value;
-    } 
+    }
+
+    public boolean equals(Fait<T> fait) {
+        return this.value.equals(fait.value) && this.code.equals(fait.code);
+    }
 }
