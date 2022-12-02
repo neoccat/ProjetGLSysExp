@@ -1,0 +1,12 @@
+faits_booleens = malade , fumeur , alcool , fait_sport , triste , joyeux , mange_sainement , lourd , leger , en_bonne_sante , en_mauvaise_sante;
+faits_symboliques = activite_physique_favorite;
+faits_entiers = poids , temperature;
+
+fait_sport;
+non fumeur;
+activite_physique_favorite = course;
+poids = 81;
+
+
+
+

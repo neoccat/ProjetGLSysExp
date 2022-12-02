@@ -1,0 +1,1 @@
+Utilisation du patron dcoration pour les fait : classe abstraite fait -> implementation concrete boolean, entier, symbolique
