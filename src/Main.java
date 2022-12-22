@@ -3,7 +3,6 @@ import java.io.IOException;
 
 import parser.Parser;
 
-
 public class Main {
     
     public static void main(String[] args) throws IOException {
