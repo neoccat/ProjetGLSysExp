@@ -20,14 +20,14 @@ import model.FaitSymbollique;
  */
 public final class Parser {
 
-    private static Parser instance = new Parser();
+    private static Parser instance;
     private static BufferedReader reader = null;
 
-    private Parser() {
-        try {
-            if(this.instance != null) throw new NewSingletonException();
-        } catch(NewSingletonException e) {
-            System.err.println(e.getMessage());
+    private Parser() throws NewSingletonException {
+        if(this.instance != null) {
+            throw new NewSingletonException();
+        } else {
+            this.instance = new Parser();
         }
     }
 
