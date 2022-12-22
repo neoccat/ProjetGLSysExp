@@ -35,25 +35,44 @@ public final class Parser {
         return instance;
     }
 
-    public static Map<String, FaitBoolean> initialiseFaitsBoolean(String file) throws IOException {
+    /**
+     * Retrouve la ligne ou les faits sont instancié selon le type
+     * @param file
+     * @param type
+     * @return
+     * @throws IOException
+     */
+    public String[] findFactLineAndProcess(String file, String type) throws IOException {
         // parse le fichier en paramètre et initialise la map des faits
-        
-        reader = new BufferedReader(new FileReader(file)); 
+        reader = new BufferedReader(new FileReader(file));
+
         String line = reader.readLine();
         while(line != null) {
-            if(line.contains(Constants.FAITS_BOOLEAN_VARIABLE.get())) {
+            if(line.contains(type)) {
                 break;
             }
             line = reader.readLine();
         }
 
-        line = line.replace("faits_booleens = ", "");
+        line = line.replace("faits_" + type + " = ", "");
+        line = line.replace(" ", "");
         line = line.replace(";", "");
-        String[] splitted = line.split(","); 
-        System.out.println(line);
-        for(String str : splitted) System.out.println(str);
+        String[] splitted = line.split(",");
 
-        return new HashMap<>();
+        System.out.println(line);
+        return splitted;
+    }
+
+    public Map<String, FaitBoolean> initialiseFaitsBoolean(String file) throws IOException {
+
+        String[] splitted = findFactLineAndProcess(file, Constants.FAIT_BOOLEENS); 
+
+        Map<String, FaitBoolean> mapFaits = new HashMap<>();
+        for(String str : splitted) {
+            mapFaits.put(str, null);
+        }
+
+        return mapFaits;
     }
 
     public Map<String, FaitInteger> initialiseFaitsEntier(String file) {

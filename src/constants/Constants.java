@@ -1,16 +1,9 @@
 package constants;
 
-public enum Constants {
-    FAITS_BOOLEAN_VARIABLE("faits_booleens");
+public class Constants {
 
-    private String constant;
-
-    Constants(String cst) {
-        this.constant = cst;
-    }
-
-    public String get() {
-        return constant;
-    }
+    public final static String FAIT_BOOLEENS = "booleens";
+    public final static String FAIT_ENTIERS = "entiers";
+    public final static String FAIT_SYMBOLIQUES = "symboliques";
     
 }
