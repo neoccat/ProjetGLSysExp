@@ -9,6 +9,15 @@ activite_physique_favorite = course;
 poids = 81;
 FIN_BASE_DE_FAITS;
 
+BASE_DE_REGLES;
+SI fumeur
+ET NON(fait_sport)
+ALORS NON(en_bonne_sante);
+SI NON(fumeur)
+ET fait_sport
+ALORS en_bonne_sante;
+FIN_BASE_DE_REGLES;
+
 
 
 

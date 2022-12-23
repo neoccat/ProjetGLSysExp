@@ -1,6 +1,7 @@
 package parser;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -8,10 +9,12 @@ import java.util.Map;
 
 import constants.Constants;
 import exceptions.NewSingletonException;
+import exceptions.NoTypeException;
 import model.FactMap;
 import model.FaitBoolean;
 import model.FaitInteger;
 import model.FaitSymbolique;
+import model.Regle;
 import utils.Utils;
 
 
@@ -76,9 +79,13 @@ public final class Parser {
     public void initialiseFacts(String file) throws IOException {
         FactMap fm = FactMap.getInstance();
 
-        fm.setFaitsBooleens((Map<String, FaitBoolean>)initialiseFaitsType(file, Constants.FAITS_BOOLEENS));
-        fm.setFaitEntiers((Map<String, FaitInteger>)initialiseFaitsType(file, Constants.FAITS_ENTIERS));
-        fm.setFaitsSymboliques((Map<String, FaitSymbolique>)initialiseFaitsType(file, Constants.FAITS_SYMBOLIQUES));
+        try {
+            fm.setFaitsBooleens((Map<String, FaitBoolean>)initialiseFaitsType(file, Constants.FAITS_BOOLEENS));
+            fm.setFaitEntiers((Map<String, FaitInteger>)initialiseFaitsType(file, Constants.FAITS_ENTIERS));
+            fm.setFaitsSymboliques((Map<String, FaitSymbolique>)initialiseFaitsType(file, Constants.FAITS_SYMBOLIQUES));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -92,8 +99,9 @@ public final class Parser {
      * @param type
      * @return
      * @throws IOException
+     * @throws NoTypeException
      */
-    public Map<String, ?> initialiseFaitsType(String file, String type) throws IOException {
+    public Map<String, ?> initialiseFaitsType(String file, String type) throws IOException, NoTypeException {
 
         String[] splitted = findFactLineAndProcess(file, type);
 
@@ -108,10 +116,8 @@ public final class Parser {
             case Constants.FAITS_SYMBOLIQUES:
                 mapFaits = new HashMap<String, FaitSymbolique>();
                 break;
-        }
-
-        if(null == mapFaits) {
-            mapFaits = new HashMap<>();
+            default :
+                throw new NoTypeException();
         }
 
         for(String str : splitted) {
@@ -121,9 +127,25 @@ public final class Parser {
         return mapFaits;
     }
 
+    public Map<String, Regle> initialiseRegles(String file) throws IOException {
+        reader = new BufferedReader(new FileReader(file));
+
+        String line = reader.readLine();
+        while(!line.contains(Constants.BASE_DE_REGLE_OUVERTURE)) {
+            line = reader.readLine();
+        }
+        line = reader.readLine();
+
+        
+
+        return new HashMap<>();
+    }
+
 
     /* --------------------------------------------------------------------------- */
+    /*                                                                             */
     /*                     INITIALISATION DE LA BASE DE FAITS                      */
+    /*                                                                             */
     /* --------------------------------------------------------------------------- */
 
     /**
@@ -153,26 +175,6 @@ public final class Parser {
 
         
         processBaseDeFait(toSplit.toString().split(";"));
-        
-        System.out.println("\nAFTER : \n");
-        FactMap fm = FactMap.getInstance();
-        for(Map.Entry<String, FaitBoolean> entry : fm.getFaitsBooleens().entrySet() ) {
-            System.out.println("[" + entry.getKey() + ", " + entry.getValue() + "]");
-        }
-
-        System.out.println("\n");
-
-        for(Map.Entry<String, FaitInteger> entry : fm.getFaitsEntiers().entrySet() ) {
-            System.out.println("[" + entry.getKey() + ", " + entry.getValue() + "]");
-        }
-
-        System.out.println("\n");
-
-        for(Map.Entry<String, FaitSymbolique> entry : fm.getFaitsSymboliques().entrySet() ) {
-            System.out.println("[" + entry.getKey() + ", " + entry.getValue() + "]");
-        }
-
-        System.out.println("\n");
     }
 
     public void processBaseDeFait(String[] faits) {
@@ -218,8 +220,17 @@ public final class Parser {
         }
     }
 
-    
 
+    /* --------------------------------------------------------------------------- */
+    /*                                                                             */
+    /*                    INITIALISATION DE LA BASE DE REGLES                      */
+    /*                                                                             */
+    /* --------------------------------------------------------------------------- */
+
+    
+    public void initialiseBaseDeRegles(String file) {
+
+    }
 
 
 }
