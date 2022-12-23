@@ -14,6 +14,11 @@ public abstract class Fait<T> {
         this.code = code;
     }
 
+    public Fait(String code, T value) {
+        this(code);
+        this.value = value;
+    }
+
     public T getValue() {
         return this.value;
     }
@@ -24,6 +29,11 @@ public abstract class Fait<T> {
 
     public void setValue(T value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "" + value;
     }
 
     public boolean equals(Fait<T> fait) {

@@ -2,10 +2,14 @@ faits_booleens = malade , fumeur , alcool , fait_sport , triste , joyeux , mange
 faits_symboliques = activite_physique_favorite;
 faits_entiers = poids , temperature;
 
+BASE_DE_FAITS;
 fait_sport;
-non fumeur;
+NON(fumeur);
 activite_physique_favorite = course;
 poids = 81;
+FIN_BASE_DE_FAITS;
+
+
 
 
 
