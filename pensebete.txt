@@ -1,2 +1,5 @@
 Utilisation du patron dcoration pour les fait : classe abstraite fait -> implementation concrete boolean, entier, symbolique
 singleton pour le parser
+Moteur d'inférence incomplet solution ?
+- Envisager un arbre binaire de recherche pour la résolution de la question
+- Parser d'expression boolean ?

@@ -11,5 +11,9 @@ public class Constants {
 
     public final static String BASE_DE_REGLE_OUVERTURE = "BASE_DE_REGLES";
     public final static String BASE_DE_REGLE_FERMETURE = "FIN_BASE_DE_REGLES";
+
+    public final static String IF = "SI";
+    public final static String AND = "ET";
+    public final static String THEN = "ALORS";
     
 }

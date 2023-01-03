@@ -6,7 +6,18 @@ public class Regle {
     private String expression;
 
     // Résultat de l'évaluation renvoyée par le moteur d'inférence
-    private String evaluation;
+    private Boolean evaluation;
+
+    
+
+    public Regle(String expression) {
+        this.expression = expression;
+    }
+
+    public Regle(String expression, Boolean eval) {
+        this(expression);
+        this.evaluation = eval;
+    }
 
     public String getExpression() {
         return expression;
@@ -16,11 +27,11 @@ public class Regle {
         this.expression = expression;
     }
 
-    public String getEvaluation() {
+    public Boolean getEvaluation() {
         return evaluation;
     }
 
-    public void setEvaluation(String evaluation) {
+    public void setEvaluation(Boolean evaluation) {
         this.evaluation = evaluation;
     }
 

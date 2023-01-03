@@ -27,4 +27,17 @@ public class MapRegles {
         }
         return instance;
     }
+
+    public Map<String, Regle> getMapRegles() {
+        return this.mapRegles;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stb = new StringBuilder();
+        for(Map.Entry<String, Regle> entry : this.mapRegles.entrySet()) {
+            stb.append(entry.getValue().getExpression() + " = " + entry.getValue().getEvaluation() + "\n");
+        }
+        return stb.toString();
+    }
 }

@@ -12,6 +12,7 @@ FIN_BASE_DE_FAITS;
 BASE_DE_REGLES;
 SI fumeur
 ET NON(fait_sport)
+ET poids > 100
 ALORS NON(en_bonne_sante);
 SI NON(fumeur)
 ET fait_sport

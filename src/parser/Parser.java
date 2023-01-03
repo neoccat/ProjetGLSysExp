@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import constants.Constants;
+import engine.Engine;
 import exceptions.NewSingletonException;
 import exceptions.NoTypeException;
 import model.FactMap;
 import model.FaitBoolean;
 import model.FaitInteger;
 import model.FaitSymbolique;
+import model.MapRegles;
 import model.Regle;
 import utils.Utils;
 
@@ -127,20 +129,6 @@ public final class Parser {
         return mapFaits;
     }
 
-    public Map<String, Regle> initialiseRegles(String file) throws IOException {
-        reader = new BufferedReader(new FileReader(file));
-
-        String line = reader.readLine();
-        while(!line.contains(Constants.BASE_DE_REGLE_OUVERTURE)) {
-            line = reader.readLine();
-        }
-        line = reader.readLine();
-
-        
-
-        return new HashMap<>();
-    }
-
 
     /* --------------------------------------------------------------------------- */
     /*                                                                             */
@@ -228,7 +216,32 @@ public final class Parser {
     /* --------------------------------------------------------------------------- */
 
     
-    public void initialiseBaseDeRegles(String file) {
+    public void initialiseBaseDeRegles(String file) throws IOException {
+
+        reader = new BufferedReader(new FileReader(file));
+
+        String line = reader.readLine();
+        while(!line.contains(Constants.BASE_DE_REGLE_OUVERTURE)) {
+            line = reader.readLine();
+        }
+        line = reader.readLine();
+
+        StringBuilder buffer = new StringBuilder();
+        MapRegles regles = MapRegles.getInstance();
+        while(!line.contains(Constants.BASE_DE_REGLE_FERMETURE)) {
+            if(!line.contains(";")) {
+                buffer.append(line + ";");
+            } else {
+                buffer.append(line);
+                regles.getMapRegles().put(buffer.toString(), new Regle(buffer.toString(), null));
+                buffer.setLength(0);
+            }
+            line = reader.readLine();
+        }
+
+        System.out.println(regles.toString());
+
+        Engine.evaluateAllRules(regles.getMapRegles());
 
     }
 
