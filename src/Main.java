@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 
 import engine.Engine;
@@ -13,6 +12,19 @@ public class Main {
         
         parser.initialiseBaseDeFaits(args[0]);
         parser.initialiseBaseDeRegles(args[0]);
+
+        Engine.evaluateAllRules(MapRegles.getInstance().getMapRegles());
+
+        Engine.calculateAverageResponses();
+
+        System.out.println();
+        System.out.println("RESULTATS : ");
+
+        if(Engine.average) {
+            System.out.println("Selon le programme, l'individu est globalement en bonne santé.");
+        } else {
+            System.out.println("Selon le programme, l'individu est globalement en mauvaise santé.");
+        }
 
     }
 }

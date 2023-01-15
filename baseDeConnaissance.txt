@@ -3,10 +3,12 @@ faits_symboliques = activite_physique_favorite;
 faits_entiers = poids , temperature;
 
 BASE_DE_FAITS;
-fait_sport;
-NON(fumeur);
+NON(fait_sport);
+fumeur;
 activite_physique_favorite = course;
-poids = 81;
+poids = 101;
+NON(malade);
+temperature = 37;
 FIN_BASE_DE_FAITS;
 
 BASE_DE_REGLES;
@@ -17,6 +19,9 @@ ALORS NON(en_bonne_sante);
 SI NON(fumeur)
 ET fait_sport
 ALORS en_bonne_sante;
+SI malade
+ET temperature > 38
+ALORS NON(en_bonne_sante);
 FIN_BASE_DE_REGLES;
 
 

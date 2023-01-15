@@ -3,3 +3,7 @@ singleton pour le parser
 Moteur d'inférence incomplet solution ?
 - Envisager un arbre binaire de recherche pour la résolution de la question
 - Parser d'expression boolean ?
+
+piste d'amelioration :
+    pourrais donner des conseils pour ameliorer la condition d'un individu
+    rendre le système générique pour tout type de theme

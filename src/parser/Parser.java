@@ -239,9 +239,7 @@ public final class Parser {
             line = reader.readLine();
         }
 
-        System.out.println(regles.toString());
-
-        Engine.evaluateAllRules(regles.getMapRegles());
+        
 
     }
 

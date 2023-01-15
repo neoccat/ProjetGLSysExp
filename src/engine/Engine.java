@@ -1,13 +1,16 @@
 package engine;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-
-import javax.script.ScriptException;
+import java.util.StringTokenizer;
 
 import constants.Constants;
 import model.FactMap;
 import model.FaitBoolean;
 import model.FaitInteger;
+import model.MapRegles;
 import model.Regle;
 
 /**
@@ -17,28 +20,93 @@ import model.Regle;
  */
 public class Engine {
 
+    /**
+     * Représente la moyenne des réponse calculé pour chaque regles. Représente ainsi la réponse finale.
+     */
+    public static boolean average;
 
+    /**
+     * Appel la méthode evaluate sur toute les regles de la map de regles
+     * @param regles la map de regles que l'ont veut évaluer
+     */
     public static void evaluateAllRules(Map<String, Regle> regles) {
 
         for(Map.Entry<String, Regle> regleEntry : regles.entrySet()) {
-            System.out.println(translate(regleEntry.getValue().getExpression()));
+            System.out.println("BASE EXPRESSION : " + regleEntry.getKey());
+            System.out.println("SI : " + regleEntry.getValue().getExpression() + " ALORS : " + regleEntry.getValue().getFact());
             System.out.println("evaluation : ");
             try {
-                System.out.println(evaluate(translate(regleEntry.getValue().getExpression())));
+                if(regleEntry.getValue().getFact().contains("!")) {
+                    System.out.println("En bonne santé selon cette regle : " + !evaluate(regleEntry.getValue().getExpression()));
+                    regleEntry.getValue().setEvaluation(!evaluate(regleEntry.getValue().getExpression()));
+                } else {
+                    System.out.println("En bonne santé selon cette regle : " + evaluate(regleEntry.getValue().getExpression()));
+                    regleEntry.getValue().setEvaluation(evaluate(regleEntry.getValue().getExpression()));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //regleEntry.getValue().setEvaluation(evaluate(regleEntry.getKey()));
+            System.out.println();
         }
     }
 
-    public static Object evaluate(String expression) throws ScriptException {
-        //SI fumeur;ET NON(fait_sport);ALORS NON(en_bonne_sante)
-        return false;
+    public static boolean evaluate(String expression) {
+        List<Boolean> bools = new ArrayList<>();
+
+        StringTokenizer tokens = new StringTokenizer(expression, "&&");
+        while(tokens.hasMoreTokens()) {
+            String current = tokens.nextToken();
+            if(!current.contains(">") && !current.contains("<")) {
+                if(current.contains("!")) {
+                    bools.add(!Boolean.parseBoolean(current.replace("!", "")));
+                } else {
+                    bools.add(Boolean.parseBoolean(current));
+                }
+            } else {
+                bools.add(evaluateVarExpression(current));
+            }
+        }
+
+        if(bools.contains(false)) {
+            return false;
+        }
+        return true;
     }
 
-    public static String translate(String rawExpression) {
+    /**
+     * Si le token est une expression avec des variable on appel cette méthode pour l'évaluer
+     */
+    public static boolean evaluateVarExpression(String s) {
+        //81>100
+        String delim = "";
+        if(s.contains(">")) {
+            delim = ">";
+        } else if(s.contains("<")) {
+            delim = "<";
+        }
+            
+        StringTokenizer tokens = new StringTokenizer(s, delim);
+        int param1 = Integer.parseInt(tokens.nextToken());
+        int param2 = Integer.parseInt(tokens.nextToken());
+
+        if(delim.equals(">")) {
+            return param1 > param2;
+        }
+        return param1 < param2;
+
+    }
+
+    /**
+     * Permet de traduire une expression d'une règle en une expression évaluable par la méthode
+     * evaluate. Remplace aussi les différentes valeurs avec les valeurs connues dans la map des faits.
+     * 
+     * @param rule L'expression de la règle concernée
+     * @return L'expression traduite avec remplacement des valeurs connues
+     */
+    public static String translate(String rule) {
         FactMap fm = FactMap.getInstance();
+
+        String rawExpression = rule;
 
         String newExpression = "";
         for(String str : rawExpression.split(";")) {
@@ -67,20 +135,26 @@ public class Engine {
 
 
         return newExpression;
-
-
     }
 
-    public static boolean isIfStatement(String statement) {
-        return statement.startsWith(Constants.IF);
-    }
+    /**
+     * Parcours la map des regles et calculs la moyenne de réponses à ces regles.
+     * 
+     */
+    public static void calculateAverageResponses() {
+        List<Boolean> bools = new ArrayList<>();
 
-    public static boolean isAndStatement(String statement) {
-        return statement.startsWith(Constants.AND);
-    }
+        for(Map.Entry<String, Regle> regleEntry : MapRegles.getInstance().getMapRegles().entrySet()) {
+            bools.add(regleEntry.getValue().getEvaluation());
+        }
 
-    public static boolean isThenStatement(String statement) {
-        return statement.startsWith(Constants.THEN);
+        int falseOccurences = Collections.frequency(bools, false);
+        System.out.println(falseOccurences + ", " + bools.size());
+        for(boolean bool : bools) {
+            System.out.println(bool);
+        }
+
+        Engine.average = falseOccurences < bools.size() / 2;
     }
     
 }
